@@ -1,0 +1,25 @@
+{
+    "chrome": {
+        "pathToChrome": "C:\\Program Files\\Google\\Chrome\\Application",
+        "pathToProfile": "C:\\Users\\vovkb\\AppData\\Local\\Google\\Chrome\\User Data"
+
+
+    },
+
+
+    "BOT": {
+        "claimInterval": 3
+    },
+
+    "DEBUG": false,
+
+
+    "WIDTH": 1920,
+    "HEIGHT": 1080,
+    "CLOSE": "ctrl+alt+q"
+
+
+
+
+    
+}
