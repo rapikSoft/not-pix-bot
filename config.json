@@ -1,7 +1,7 @@
 {
     "chrome": {
         "mainProfiles": false,
-        "pathToProfiles": "C:\\Users\\<username>\\AppData\\Local\\Google\\Chrome\\User Data",
+        "pathToProfiles": "C:\\Users\\<user>\\AppData\\Local\\Google\\Chrome\\User Data",
 
         "profiles": []
 
@@ -15,7 +15,7 @@
 
     "DEBUG": false,
     "port": 9221,
-
+    "SLEEP": 0.5,
     "WIDTH": 1920,
     "HEIGHT": 1080,
     "SLEEP_TIME": 1800

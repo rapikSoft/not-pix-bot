@@ -23,7 +23,7 @@ def open(config,acc):
     
     subprocess.Popen(f'"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port={config["port"]}  --disable-extensions --profile-directory="{acc}" https://web.telegram.org/k/#@notpixel', shell=True)
 
-    
+    sleep(config["SLEEP"])
 
     return iframe(connect(config["port"]))
 
