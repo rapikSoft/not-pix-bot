@@ -13,3 +13,7 @@
 <li>✅ It selects the most profitable cells (bonus +8 points).</li>
 <li>🔥 An automatic upgrade feature and the ability to connect proxies will also be added.</li>
 </ul>
+
+
+
+<h3>Author's Telegram channel: <a href="https://t.me/+WWPqwk16vGhiMTJk">https://t.me/+WWPqwk16vGhiMTJk</a></h3>
