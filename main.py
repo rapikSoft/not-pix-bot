@@ -1,21 +1,17 @@
 from colorama import Fore,init
-from selenium import webdriver
 from time import sleep
 from selenium.webdriver.common.by import By
-import os
-import canvas
-from _logging import getLogger
-import subprocess
-import psutil
-import openConfig
+from foo import pixCanvas
+from foo import getLogger
+from foo import getConfig,getAccaunts
 import threading
-from bot import bot
+from bot import Bot
+from random import randint
 import pyautogui
+
+import chrome
 import sys
-import keyboard
 init()
-
-
 
 logger = getLogger()
 
@@ -23,67 +19,35 @@ logger = getLogger()
 # -Config Open-
 
 
-config = openConfig.getConfig()
+config = getConfig()
 
 
 
-path = config["chrome"]["pathToChrome"]
-profile = config["chrome"]["pathToProfile"]
 
 logo = """
-███╗░░██╗░█████╗░████████╗███╗░░██╗░█████╗░██████╗░███████╗
-████╗░██║██╔══██╗╚══██╔══╝████╗░██║██╔══██╗██╔══██╗██╔════╝
-██╔██╗██║██║░░██║░░░██║░░░██╔██╗██║██║░░██║██║░░██║█████╗░░
-██║╚████║██║░░██║░░░██║░░░██║╚████║██║░░██║██║░░██║██╔══╝░░
-██║░╚███║╚█████╔╝░░░██║░░░██║░╚███║╚█████╔╝██████╔╝███████╗
-╚═╝░░╚══╝░╚════╝░░░░╚═╝░░░╚═╝░░╚══╝░╚════╝░╚═════╝░╚══════╝"""
+
+╋╋╋╋╋╋╋╋╋┏┓╋╋╋╋╋╋╋╋╋┏━┳┓
+╋╋╋╋╋╋╋╋╋┃┃╋╋╋╋╋╋╋╋╋┃┏┛┗┓
+┏━┳━━┳━━┳┫┃┏┓┏━━┳━━┳┛┗┓┏┛
+┃┏┫┏┓┃┏┓┣┫┗┛┛┃━━┫┏┓┣┓┏┫┃
+┃┃┃┏┓┃┗┛┃┃┏┓┓┣━━┃┗┛┃┃┃┃┗┓
+┗┛┗┛┗┫┏━┻┻┛┗┛┗━━┻━━┛┗┛┗━┛
+╋╋╋╋╋┃┃
+╋╋╋╋╋┗┛"""
 
 print(Fore.RED , logo, Fore.WHITE )
-
-
-
-CURRENT_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
-os.chdir(path)
+print("Creators: https://t.me/+RUoqZfYRYIs0NDc0")
 
 
 
 
-def closeChrome():
-    for proc in psutil.process_iter():
-        name = proc.name()
-        if name == "chrome.exe":
-            try:
-
-                proc.terminate()
-            except:
-                pass
-
-
-closeChrome()
-subprocess.Popen('chrome.exe --remote-debugging-port=9222  --disable-extensions --start-fullscreen', shell=True)
-
-
-def checkChromeExit():
-    while True:
-        a = False
-        for proc in psutil.process_iter():
-            name = proc.name()
-            if name == "chrome.exe":
-                a = True
-                break
-
-        if a == False:
-            logger.fatal("Chrome closed")
-            close()
-
-
-            
-        
 
 
 
 
-os.chdir(CURRENT_DIRECTORY)
+
+
+
 
 
 
@@ -102,16 +66,14 @@ def set_interval(func, sec):
 
 
 def close():
-    try:
-        claimThread.join()
-    except:
-        pass
 
-    try:
-        colorCheckThread.join()
-    except:
-        pass
-    closeChrome()
+    claimThread.cancel()
+
+
+
+    colorCheckThread.cancel()
+
+    chrome.close()
     logger.info("EXIT")
     sys.exit()
 
@@ -119,39 +81,9 @@ def close():
 
 
 
-options = webdriver.ChromeOptions()
-options.debugger_address = "127.0.0.1:9222"
-
-browser = webdriver.Chrome(options=options )
-browser.get("https://web.telegram.org/k/#@notpixel")
-
-sleep(1)
-
-x = threading.Thread(target=checkChromeExit)
-x.start()
-
-#start web
-while True:
-    try:
-        browser.find_element(By.CLASS_NAME, "is-view").click()
-        break
-    except:
-        pass
-        
-
-try:
-   
-   browser.find_element(By.CLASS_NAME, "popup-button").click()
-
-except:
-    print(Fore.BLUE,"Btn `Launch` not found", Fore.WHITE)
 
 
-sleep(3)
 
-web = browser.find_element(By.TAG_NAME, "iframe")
-
-browser.switch_to.frame(web)
 
 
 
@@ -159,25 +91,129 @@ browser.switch_to.frame(web)
 
 
 #main 
+mainProfiles = config["chrome"]["mainProfiles"]
+if mainProfiles == False:
+
+    
+
+    acc = getAccaunts(config["chrome"]["pathToProfiles"]+"\\Local State")
+
+else:
+    acc = getAccaunts(config["chrome"]["pathToProfiles"]+"\\Local State",config["chrome"]["profiles"])
+    accIndex = 0
+    presentAcc = acc[accIndex]
+   
 
 
-canv = canvas.pixCanvas(browser)
+print("🙉 Your Profiles:")
+for a in acc:
+
+    print(a)
 
 
 
-canv.zoom(100)
+
+def init_(acc):
 
 
-bot = bot(browser, logger)
-
-bot.claimCheck()
-claimThread = set_interval(bot.claimCheck, 5*60)
+    chrome.close()
+    browser = chrome.open(config,acc)
 
 
-pyautogui.moveTo((config["WIDTH"]/2)-20, config["HEIGHT"]/2)
-pyautogui.click()
+
+    seed = 0
+    while True:
+        try:
+            canv = pixCanvas(browser)
+            seed = 0
+            break
+        except:
+            seed += 1
 
 
-colorCheckThread = set_interval(bot.check, 5)
+            if seed >3000:
+                seed = 0
+                chrome.close()
+                browser = chrome.open(config)
+                
+
+    windowCenter= [(browser.get_window_position()["x"]+browser.get_window_size()["width"]+10)//2, browser.get_window_position()["y"]+browser.get_window_size()["height"]//2]
+
+    canv.zoom(10)
 
 
+    bot = Bot(browser, logger)
+
+    bot.claimCheck()
+    claimThread = set_interval(bot.claimCheck, 5*60)
+    logger.info(f"🪟 {browser.get_window_position()}")
+
+    pyautogui.moveTo(windowCenter[0]-10,windowCenter[1])
+    pyautogui.click()
+
+
+
+    bot.chooseColor()
+
+
+    colorCheckThread = set_interval(lambda: bot.check(windowCenter), 5)
+
+    return bot,claimThread,colorCheckThread
+
+bot,claimThread,colorCheckThread = init_(acc if mainProfiles==False else presentAcc)
+if mainProfiles:
+    
+    accIndex += 1
+    try:
+        presentAcc = acc[accIndex]
+    except:
+        accIndex +=1
+while True:
+    if mainProfiles == False:
+        if bot.noEnergy == 1:
+            try:
+                claimThread.cancel()
+            except:
+                pass
+
+            try:
+                colorCheckThread.cancel()
+            except:
+                pass
+            chrome.close()
+            time_ = int(config["SLEEP_TIME"])
+            logger.info(f"💤 launch in {time_/60} min")
+            sleep(time_)
+
+            bot,claimThread,colorCheckThread = init_(acc)
+    else:
+        if bot.noEnergy == 1:
+            try:
+                claimThread.cancel()
+            except:
+                pass
+
+            try:
+                colorCheckThread.cancel()
+            except:
+                pass
+            chrome.close()
+            time_ = randint(1,10)
+            logger.info(f"💤 next profile  launch in {time_} sec")
+            sleep(time_)
+
+            bot,claimThread,colorCheckThread = init_(presentAcc)
+            accIndex += 1
+            try:
+                presentAcc = acc[accIndex]
+            except:
+                chrome.close()
+
+                accIndex = 0
+                presentAcc = acc[accIndex]
+                time_ = int(config["SLEEP_TIME"])
+                logger.info(f"💤 launch in {time_/60} min")
+                sleep(time_)
+
+
+                bot,claimThread,colorCheckThread = init_(presentAcc)

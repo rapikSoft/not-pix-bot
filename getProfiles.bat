@@ -1,0 +1,1 @@
+py foo/openConfig.py > profiles.txt

@@ -1,7 +1,9 @@
 {
     "chrome": {
-        "pathToChrome": "C:\\Program Files\\Google\\Chrome\\Application",
-        "pathToProfile": "C:\\Users\\vovkb\\AppData\\Local\\Google\\Chrome\\User Data"
+        "mainProfiles": false,
+        "pathToProfiles": "C:\\Users\\<username>\\AppData\\Local\\Google\\Chrome\\User Data",
+
+        "profiles": []
 
 
     },
@@ -12,12 +14,15 @@
     },
 
     "DEBUG": false,
-
+    "port": 9221,
 
     "WIDTH": 1920,
     "HEIGHT": 1080,
-    "CLOSE": "ctrl+alt+q"
+    "SLEEP_TIME": 1800
 
+
+
+    
 
 
 
